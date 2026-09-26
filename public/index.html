@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WeWatchy — Watch together</title>
+<link rel="stylesheet" href="/css/style.css" />
+</head>
+<body class="home-body">
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="home-wrap">
+  <div class="hero-badge">✨ Simple watch party for friends</div>
+  <h1 class="hero-title">Watch together.<br/><span class="grad">Laugh together.</span></h1>
+  <p class="hero-sub">YouTube + video files in perfect sync, with face cams and live chat. Create a room, share the link, done.</p>
+  <div class="glass home-card spotlight">
+    <label>Your name</label>
+    <input id="name" placeholder="e.g. Ahmed" maxlength="30" />
+    <label>Room name</label>
+    <input id="roomName" placeholder="e.g. Friday Movie Night" maxlength="60" />
+    <button id="createBtn" class="btn primary big shine">Create room + copy link 🍿</button>
+    <div class="divider"><span>or join friends</span></div>
+    <label>Invite link / code</label>
+    <input id="joinCode" placeholder="paste link or code e.g. a3f9c1" />
+    <button id="joinBtn" class="btn big">Join room →</button>
+    <div class="feat-row">
+      <span>🎬 YT sync</span><span>📁 File share</span><span>🎥 Face chat</span><span>💬 Live chat</span>
+    </div>
+  </div>
+</div>
+<script>
+const nameEl = document.getElementById('name');
+nameEl.value = localStorage.getItem('wewatchy_name') || '';
+document.getElementById('createBtn').onclick = async () => {
+  const name = nameEl.value.trim() || 'Guest';
+  localStorage.setItem('wewatchy_name', name);
+  const roomName = document.getElementById('roomName').value.trim() || 'Movie Night';
+  const res = await fetch('/api/rooms', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ name: roomName }) });
+  const data = await res.json();
+  location.href = `/r/${data.roomId}?name=` + encodeURIComponent(name);
+};
+document.getElementById('joinBtn').onclick = () => {
+  const name = nameEl.value.trim() || 'Guest';
+  localStorage.setItem('wewatchy_name', name);
+  let code = document.getElementById('joinCode').value.trim();
+  const m = code.match(/\/r\/([a-z0-9]+)/i) || code.match(/([a-f0-9]{6})/i);
+  if (m) code = m[1];
+  if (!code) return alert('Paste invite link or code');
+  location.href = `/r/${code}?name=` + encodeURIComponent(name);
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: wewatchy
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MAX_UPLOAD_MB
+        value: 300
+      # WebRTC relay for friends on different networks (see DEPLOY.md).
+      # Get free values from https://www.metered.ca/tools/openrelay/
+      - key: TURN_URLS
+        sync: false
+      - key: TURN_USERNAME
+        sync: false
+      - key: TURN_CREDENTIAL
+        sync: false

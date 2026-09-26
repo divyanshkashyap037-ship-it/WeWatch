@@ -1,0 +1,17 @@
+{
+  "name": "wewatchy",
+  "version": "0.1.0",
+  "description": "Watch movies together with friends - synced video + video chat",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "npm --prefix client install --no-audit --no-fund && npm --prefix client run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.7.5"
+  }
+}

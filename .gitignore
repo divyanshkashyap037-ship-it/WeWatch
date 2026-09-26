@@ -1,0 +1,11 @@
+node_modules/
+client/node_modules/
+client/dist/
+uploads/*.mp4
+uploads/*.webm
+uploads/*.mkv
+uploads/*.mov
+uploads/*.avi
+!uploads/.gitkeep
+.env
+*.log

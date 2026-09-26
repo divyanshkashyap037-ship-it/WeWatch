@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WeWatchy Room</title>
+<link rel="stylesheet" href="/css/style.css" />
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+<div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<header class="topbar glass">
+  <div class="brand">
+    <div class="logo">🍿</div>
+    <div>
+      <div class="room-title" id="roomName">Movie Night</div>
+      <div class="room-sub"><span id="status" class="status">Connecting…</span></div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span class="pill" id="onlineCount">1 online</span>
+    <button id="copyBtn" class="btn shine">🔗 Copy invite</button>
+    <button id="leaveBtn" class="btn ghost">Leave</button>
+  </div>
+</header>
+
+<div id="toast" class="toast"></div>
+
+<main class="layout">
+  <section class="player-col">
+    <div class="glass urlbar">
+      <span class="link-ico">🔗</span>
+      <input id="videoUrl" placeholder="Paste YouTube link (watch / youtu.be / shorts / live) or mp4 link…" />
+      <button id="loadBtn" class="btn primary shine">Load ▶</button>
+      <label class="btn filebtn" title="Upload a video file to share with room">📁 File<input id="fileInput" type="file" accept="video/*,.mkv,.avi,.mov" hidden /></label>
+    </div>
+    <div class="demo-row">
+      <span>Try:</span>
+      <button data-demo="dQw4w9WgXcQ" class="chip">Demo 1</button>
+      <button data-demo="aqz-KE-bpKQ" class="chip">Demo 2 BigBuckBunny</button>
+      <button data-demo="eRsGyueVLvQ" class="chip">Demo 3</button>
+    </div>
+
+    <div class="videowrap glow">
+      <div id="yt-wrap" style="display:none"><div id="youtube-player"></div></div>
+      <video id="mp4-player" controls playsinline preload="auto" style="display:none"></video>
+      <div id="emptyState" class="empty">
+        <div class="empty-big">🍿</div>
+        <div><b>Nothing playing yet</b><br/><span>Paste a YouTube link above and hit Load —<br/>it will start for everyone in sync.</span></div>
+      </div>
+      <div id="emojiLayer"></div>
+    </div>
+
+    <div class="glass actingbar">
+      <span id="nowActing">Nothing playing yet</span>
+      <span class="spacer"></span>
+      <button id="playBtn" class="btn small">▶</button>
+      <button id="pauseBtn" class="btn small">⏸</button>
+      <button id="syncBtn" class="btn small" title="Force re-sync">↻ Sync</button>
+    </div>
+  </section>
+
+  <aside class="side-col">
+    <div class="glass card">
+      <div class="card-head">🎥 Faces <span class="muted"><span id="faceCount">1</span> in room · cam on/off like Zoom</span></div>
+      <div id="faces" class="faces"></div>
+      <div class="mediabar">
+        <button id="micBtn" class="btn ctrl"><i>🎤</i> <span>Mute</span></button>
+        <button id="camBtn" class="btn ctrl"><i>📷</i> <span>Cam off</span></button>
+      </div>
+    </div>
+
+    <div class="glass card chat-card">
+      <div class="card-head">💬 Chat
+        <span class="reacts">
+          <button data-emoji="😂">😂</button><button data-emoji="❤️">❤️</button><button data-emoji="🔥">🔥</button><button data-emoji="😮">😮</button><button data-emoji="👏">👏</button>
+        </span>
+      </div>
+      <div id="chat" class="chat"></div>
+      <div class="chatbar">
+        <input id="chatInput" placeholder="Type a message…" maxlength="500" />
+        <button id="sendBtn" class="btn primary">Send</button>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<footer class="bottombar glass">
+  <button id="micBtn2" class="btn">🎤</button>
+  <button id="camBtn2" class="btn">📷</button>
+  <button id="copyBtn2" class="btn primary">🔗 Invite</button>
+</footer>
+
+<script src="/js/room.js"></script>
+</body>
+</html>
