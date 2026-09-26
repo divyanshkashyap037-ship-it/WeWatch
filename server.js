@@ -20,7 +20,11 @@ app.use(express.json());
 const clientDist = path.join(__dirname, 'client', 'dist');
 if (fs.existsSync(clientDist)) app.use(express.static(clientDist));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 
 // ---- uploads setup (local file watch) ----
 const storage = multer.diskStorage({
