@@ -64,6 +64,7 @@ export default function Room() {
 
   const socketRef = useRef(null);
   const mp4Ref = useRef(null);
+  const ytContainerRef = useRef(null);
   const ytPlayer = useRef(null);
   const ytReady = useRef(false);
   const pendingYtId = useRef(null);
@@ -99,13 +100,17 @@ export default function Room() {
 
   // ---------- YT API ready (race-fixed) ----------
   const createYT = useCallback((videoId) => {
-    if (!window.YT || !window.YT.Player) { pendingYtId.current = videoId; return; }
+    if (!window.YT || !window.YT.Player || !ytContainerRef.current) { pendingYtId.current = videoId; return; }
     ytReady.current = true;
-    if (ytPlayer.current?.loadVideoById) { try { ytPlayer.current.loadVideoById(videoId); } catch { pendingYtId.current = videoId; } return; }
+    if (ytPlayer.current && typeof ytPlayer.current.loadVideoById === 'function') {
+      try { ytPlayer.current.loadVideoById(videoId); return; } catch { pendingYtId.current = videoId; }
+    }
     try {
-      ytPlayer.current = new window.YT.Player('yt-player', {
+      ytContainerRef.current.innerHTML = '<div id="yt-player-target" style="width:100%;height:100%;"></div>';
+      ytPlayer.current = new window.YT.Player('yt-player-target', {
         width: '100%', height: '100%', videoId,
-        playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+        host: 'https://www.youtube.com',
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1, enablejsapi: 1, origin: window.location.origin },
         events: {
           onStateChange: (e) => {
             if (isRemote.current) return;
@@ -477,7 +482,9 @@ export default function Room() {
           </div>
 
           <div className="relative mt-3 aspect-video overflow-hidden rounded-2xl border border-white/10 bg-black">
-            {video.type === 'youtube' ? <div id="yt-player" className="absolute inset-0" /> : null}
+            <div className={cn('absolute inset-0', video.type === 'youtube' ? 'block' : 'hidden')}>
+              <div ref={ytContainerRef} className="h-full w-full" />
+            </div>
             <video ref={mp4Ref} controls playsInline preload="auto" className={cn('absolute inset-0 h-full w-full', video.type === 'mp4' ? 'block' : 'hidden')} />
             {video.type === 'none' && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 text-white/40">
